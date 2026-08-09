@@ -97,6 +97,7 @@ CIRCLE_BLOCKCHAIN=ARC-TESTNET
 
 # Misc
 ADMIN_EMAIL=admin@admin.com
+ADMIN_PASSWORD=
 ```
 
 | Variable                              | Scope       | Purpose                                                                  |
@@ -107,16 +108,19 @@ ADMIN_EMAIL=admin@admin.com
 | `CIRCLE_API_KEY`                      | Server-side | Used to fetch Circle webhook public keys for signature verification.     |
 | `CIRCLE_ENTITY_SECRET`                | Server-side | Circle entity secret for wallet operations.                              |
 | `CIRCLE_BLOCKCHAIN`                   | Server-side | Blockchain network identifier (e.g., "ARC-TESTNET").                     |
-| `ADMIN_EMAIL`                         | Server-side | Admin user email address.                                                |
+| `ADMIN_EMAIL`                         | Server-side | Admin user email address. Defaults to `admin@admin.com`.                 |
+| `ADMIN_PASSWORD`                      | Server-side | Password for the auto-provisioned admin user. Required to create it; must be strong (>= 8 chars, not a common password). Leave blank to skip admin creation. |
 
 ## User Accounts
 
 ### Admin Account
 
-On first startup, an admin user is automatically created with the following credentials:
+On first startup, an admin user is automatically created **only if** `ADMIN_PASSWORD` is set to a strong value (see the environment table above):
 
-- **Email:** `admin@admin.com`
-- **Password:** `123456`
+- **Email:** `ADMIN_EMAIL` (defaults to `admin@admin.com`)
+- **Password:** the value of `ADMIN_PASSWORD` — choose a strong, unique password
+
+If `ADMIN_PASSWORD` is unset, or weak (shorter than 8 characters or a well-known password), admin creation is skipped and a message is logged — so a publicly reachable deployment never ships with a guessable default.
 
 The admin account has access to the **Admin Dashboard**, which provides an overview of all users, wallets, and transactions in the system.
 
